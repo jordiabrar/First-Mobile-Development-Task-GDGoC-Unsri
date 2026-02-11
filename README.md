@@ -18,7 +18,7 @@ Pada tugas ini Anda akan membangun sebuah **modul Dart sederhana (tanpa Flutter)
 
 ## Learning Objectives
 
-Setelah menyelesaikan tugas ini, mahasiswa mampu:
+Setelah menyelesaikan tugas ini, member mampu:
 
 * Mendesain model Dart dengan null safety yang benar
 * Mengimplementasikan `fromJson()` dan `toJson()`
@@ -206,7 +206,7 @@ Error occurred: Failed to fetch users
 
 ---
 
-## Bonus (Optional)
+## Bonus Point (Optional)
 
 * Tambahkan enum untuk status user
 * Tambahkan sorting/filtering sederhana
@@ -216,11 +216,7 @@ Error occurred: Failed to fetch users
 
 ## Deadline
 
-Sesuaikan dengan instruksi dosen.
-
-Contoh:
-
-> Deadline: 18 Februari 2026, 23:59 WIB
+> Selasa, 17 Februari 2026. 23:59 WIB
 
 ---
 
