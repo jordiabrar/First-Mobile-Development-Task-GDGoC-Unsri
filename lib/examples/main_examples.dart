@@ -1,34 +1,119 @@
-// ======================================================
-// TODO: MAIN EXAMPLES (ENTRY POINT)
-// ======================================================
+import 'dart:convert';
+import '../models/user.dart';
+import '../services/mock_service.dart';
 
-// 1. Tambahkan void main() async { ... }
+Future<void> main() async {
+  final service = MockUserService();
 
-// 2. Import:
-//    - user.dart
-//    - mock_service.dart
+  print('Fetching users...\n');
 
-// 3. Buat instance MockUserService.
+  try {
+    final users = await service.fetchUsers();
+    print('Users fetched successfully!\n');
 
-// 4. Demonstrasi async/await:
-//    - Gunakan try-catch
-//    - Panggil fetchUsers()
-//    - Print hasilnya
-//    - Tangkap dan tampilkan error jika terjadi
+    _printUsers(users);
 
-// 5. Demonstrasi JSON parsing:
-//    - Buat Map<String, dynamic> dummyJson
-//    - Gunakan User.fromJson(dummyJson)
-//    - Print hasil object
+    _demoFiltering(service, users);
+    _demoSorting(service, users);
+    _demoJsonParsing();
+    _demoCopyWith();
+    await _demoErrorHandling(service);
+  } catch (e) {
+    print('Unexpected error: ${_cleanError(e)}');
+  }
+}
 
-// 6. Demonstrasi null safety:
-//    - Akses displayName menggunakan:
-//        user.displayName ?? "No Name"
-//    - Gunakan null-aware operator seperti ?. jika relevan
+/* ---------------------------- Helper Sections ---------------------------- */
 
-// 7. Demonstrasi copyWith():
-//    - Buat object baru dari user lama dengan perubahan 1 field
-//    - Print hasilnya
+void _printUsers(List<User> users) {
+  print('All Users:');
+  for (final user in users) {
+    print(user);
+  }
+  print('');
+}
 
-// 8. Pastikan file bisa dijalankan dengan:
-//    dart run lib/examples/main_examples.dart
+void _demoFiltering(MockUserService service, List<User> users) {
+  print('-- Active users (filter) --');
+  final activeUsers = service.filterActiveUsers(users);
+  for (final user in activeUsers) {
+    print(user);
+  }
+  print('');
+}
+
+void _demoSorting(MockUserService service, List<User> users) {
+  print('-- Users sorted by age (ascending) --');
+  final sortedUsers = service.sortByAge(users);
+  for (final user in sortedUsers) {
+    print(user);
+  }
+  print('');
+}
+
+void _demoJsonParsing() {
+  print('Parsed from JSON:');
+
+  final jsonMap = {
+    'id': '99',
+    'email': 'json@example.com',
+    'displayName': 'John',
+    'age': 30,
+    'isActive': true,
+    'status': 'active',
+  };
+
+  // Decode JSON Map to User
+  final user = User.fromJson(jsonMap);
+  print(user);
+
+  // Encode back to JSON string
+  final jsonString = jsonEncode(user.toJson());
+  print('\nSerialized to JSON string:');
+  print(jsonString);
+
+  // Null safety demo
+  print('\nNull safety demo:');
+  final safeName = user.displayName ?? 'No Name';
+  print('displayName: $safeName');
+  print('length: ${user.displayName?.length}');
+  print('');
+}
+
+void _demoCopyWith() {
+  print('CopyWith result:');
+
+  final original = User(
+    id: '100',
+    email: 'copy@example.com',
+    displayName: 'Original',
+    age: 28,
+    isActive: true,
+    status: UserStatus.active,
+  );
+
+  final modified = original.copyWith(displayName: 'Modified');
+
+  print('Original : $original');
+  print('Modified : $modified');
+  print('');
+}
+
+Future<void> _demoErrorHandling(MockUserService service) async {
+  print('Simulate error (shouldFail = true)');
+
+  try {
+    await service.fetchUsers(shouldFail: true);
+  } catch (e) {
+    print('Error occurred: ${_cleanError(e)}');
+  }
+
+  print('');
+}
+
+/* ---------------------------- Utility ---------------------------- */
+
+String _cleanError(Object e) {
+  final message = e.toString();
+  return message.replaceFirst('Exception: ', '');
+}
